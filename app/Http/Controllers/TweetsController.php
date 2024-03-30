@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Entities\Tweet;
+use App\Entities\User;
 use App\Http\Controllers\Controller;
 use Doctrine\ORM\EntityManagerInterface;
 use Illuminate\Http\Request;
@@ -25,9 +26,10 @@ class TweetsController extends Controller
         ]);
 
         $tweet->body = $request->body;
-        $tweet->owner = session('user');
+        $tweet->owner = $this->em->find(User::class,session('user')->id);
+        
         $tweet->created_at = new \DateTime();
-// dd($tweet);
+
         $this->em->persist($tweet);
         $this->em->flush();
 
